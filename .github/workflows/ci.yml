@@ -23,16 +23,10 @@ jobs:
   
     test:
       timeout-minutes: 5
-      name: Tests
+      name: e2e-tests
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
   
-        - name: Setup Go
-          uses: actions/setup-go@v5
-          with:
-            go-version: '1.21'
-            cache: false
-  
-        - name: Tests
+        - name: e2e-tests
           run: make test
