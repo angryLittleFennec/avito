@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy  # API will wait for DB to be healthy
+      redis:
+        condition: service_started
+    environment:
+      DATABASE_URL: "postgres://postgres:mysecretpassword@db:5432/postgres"
+      REDIS_URL: "redis:6380"
+    networks:
+      - mynetwork
+
+  db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+      POSTGRES_DB: postgres
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      #- pgdata_test:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mynetwork
+    command: ["sh", "-c", "chmod 777 /docker-entrypoint-initdb.d/* && docker-entrypoint.sh postgres"]
+
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6380:6379"
+    networks:
+      - mynetwork
+
+  e2e-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    depends_on:
+      - api
+    environment:
+      API_URL: "http://api:8080"
+      ADMIN_TOKEN: "admin1"
+    networks:
+      - mynetwork
+    command: ["go", "test", "./..."]
+    volumes:
+      - .:/app
+
+networks:
+  mynetwork:

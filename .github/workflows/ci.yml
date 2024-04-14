@@ -1,0 +1,39 @@
+name: api
+on:
+    push
+jobs:
+    lint:
+      timeout-minutes: 5
+      name: Lint
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+  
+        - name: Setup Go
+          uses: actions/setup-go@v5
+          with:
+            go-version: '1.21'
+            cache: false
+  
+        - name: Lint (golangci-lint)
+          uses: golangci/golangci-lint-action@v4
+          with:
+            version: v1.56.2
+            args: --out-format=colored-line-number
+            working-directory: api
+  
+    test:
+      timeout-minutes: 5
+      name: Tests
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+  
+        - name: Setup Go
+          uses: actions/setup-go@v5
+          with:
+            go-version: '1.21'
+            cache: false
+  
+        - name: Tests
+          run: make test
