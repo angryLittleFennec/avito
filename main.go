@@ -2,8 +2,10 @@ package main
 
 import (
 	sv "avito/internal/server"
-	"github.com/labstack/echo/v4"
+	"net/http"
 	"os"
+
+	"github.com/labstack/echo/v4"
 )
 
 func main() {
@@ -22,5 +24,7 @@ func main() {
 	sv.RegisterHandlersWithAuth(e, server)
 	e.Use()
 
-	e.Start(":8080")
+	if err := e.Start(":8080"); err != nil && err != http.ErrServerClosed {
+		e.Logger.Fatal("Shutting down the server", err)
+	}
 }

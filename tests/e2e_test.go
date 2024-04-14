@@ -133,12 +133,16 @@ func TestGetUserBanner(t *testing.T) {
 	adminToken := "admin1"
 	client, _ := generated.NewClientWithResponses(getTestUrl())
 	ctx := context.Background()
-	client.PostBannerWithResponse(ctx, &generated.PostBannerParams{Token: &adminToken}, generated.PostBannerJSONRequestBody{
+	_, err := client.PostBannerWithResponse(ctx, &generated.PostBannerParams{Token: &adminToken}, generated.PostBannerJSONRequestBody{
 		Content:   &map[string]interface{}{"message": "New Year Sale"},
 		FeatureId: ptrToInt(1),
 		IsActive:  ptrToBool(true),
 		TagIds:    &[]int{1, 2},
 	})
+
+	if err != nil {
+		t.Errorf("Error during the banner post: %v", err)
+	}
 
 	params := generated.GetUserBannerParams{
 		TagId:     1,
