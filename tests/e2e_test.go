@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -132,15 +131,14 @@ func TestPatchAndUpdateBanner(t *testing.T) {
 
 func TestGetUserBanner(t *testing.T) {
 	adminToken := "admin1"
-	client, err := generated.NewClientWithResponses(getTestUrl())
+	client, _ := generated.NewClientWithResponses(getTestUrl())
 	ctx := context.Background()
-	_, err = client.PostBannerWithResponse(ctx, &generated.PostBannerParams{Token: &adminToken}, generated.PostBannerJSONRequestBody{
+	client.PostBannerWithResponse(ctx, &generated.PostBannerParams{Token: &adminToken}, generated.PostBannerJSONRequestBody{
 		Content:   &map[string]interface{}{"message": "New Year Sale"},
 		FeatureId: ptrToInt(1),
 		IsActive:  ptrToBool(true),
 		TagIds:    &[]int{1, 2},
 	})
-	time.Sleep(1)
 
 	params := generated.GetUserBannerParams{
 		TagId:     1,
@@ -191,7 +189,7 @@ func TestPostDuplicateBanner(t *testing.T) {
 		assert.Equal(t, http.StatusCreated, firstResp.StatusCode())
 	}
 
-	secondResp, err := client.PostBannerWithResponse(ctx, &generated.PostBannerParams{Token: &adminToken}, bannerDetails)
+	secondResp, _ := client.PostBannerWithResponse(ctx, &generated.PostBannerParams{Token: &adminToken}, bannerDetails)
 	assert.Equal(t, http.StatusConflict, secondResp.StatusCode())
 
 }
@@ -202,8 +200,4 @@ func ptrToInt(i int) *int {
 
 func ptrToBool(b bool) *bool {
 	return &b
-}
-
-func ptrToString(s string) *string {
-	return &s
 }

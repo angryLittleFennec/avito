@@ -261,19 +261,12 @@ func (s *Server) PatchBannerId(ctx echo.Context, id int, params generated.PatchB
 	return ctx.String(http.StatusOK, "OK")
 }
 
-func getBoolFromPointer(p *bool) bool {
-	if p != nil {
-		return *p
-	}
-	return false
-}
-
 func (s *Server) GetUserBanner(ctx echo.Context, params generated.GetUserBannerParams) error {
 	slog.Info("Attempting to retrieve banner", "featureID", params.FeatureId, "tagID", params.TagId)
 
 	redisKey := fmt.Sprintf("banner:%d:%d", params.FeatureId, params.TagId)
 
-	if params.UseLastRevision == nil || *params.UseLastRevision == false {
+	if params.UseLastRevision == nil || !*params.UseLastRevision {
 		slog.Info("Checking cache for banner", "redisKey", redisKey)
 		result, err := s.Redis.Get(context.Background(), redisKey).Result()
 		if err == nil {

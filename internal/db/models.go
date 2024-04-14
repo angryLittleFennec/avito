@@ -16,8 +16,8 @@ type Banner struct {
 type BannerFeatureTag struct {
 	ID        uint `gorm:"primaryKey"`
 	BannerID  uint
-	FeatureID int `gorm:"index:idx_feature_tag,unique""`
-	TagID     int `gorm:"index:idx_feature_tag,unique""`
+	FeatureID int `gorm:"index:idx_feature_tag,unique"`
+	TagID     int `gorm:"index:idx_feature_tag,unique"`
 }
 
 func (BannerFeatureTag) TableName() string {
