@@ -40,10 +40,5 @@ func NewServer(dbUrl string, redisUrl string) (*Server, error) {
 		Addr: redisUrl,
 	})
 
-	/*_, err = rdb.Ping(context.Background()).Result()
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to redis: %v", err)
-	}*/
-
 	return &Server{DB: database, Redis: rdb, Logger: logger}, nil
 }

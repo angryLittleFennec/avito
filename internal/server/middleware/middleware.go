@@ -10,7 +10,6 @@ func AdminMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Request().Header.Get("token")
 
-		// Validate the token and check if it's an admin token
 		if isValidUserToken(token) {
 			return echo.NewHTTPError(http.StatusForbidden, "No access")
 		}
@@ -27,7 +26,6 @@ func UserMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		token := c.Request().Header.Get("token")
 
-		// Validate the token and check if it's a user or admin token
 		if !isValidUserToken(token) && !isValidAdminToken(token) {
 			return echo.NewHTTPError(http.StatusUnauthorized, "Unauthorized")
 		}
@@ -36,10 +34,8 @@ func UserMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-// List of valid admin tokens
 var validAdminTokens = []string{"admin1", "admin2", "admin3"}
 
-// List of valid user tokens
 var validUserTokens = []string{"user1", "user2", "user3"}
 
 func isValidAdminToken(token string) bool {

@@ -7,7 +7,7 @@ services:
       - "8080:8080"
     depends_on:
       db:
-        condition: service_healthy  # API will wait for DB to be healthy
+        condition: service_healthy
       redis:
         condition: service_started
     environment:
@@ -25,7 +25,6 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      #- pgdata_test:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

@@ -95,7 +95,7 @@ func TestDeleteBannerLifecycle(t *testing.T) {
 }
 
 func TestPatchAndUpdateBanner(t *testing.T) {
-	client, err := generated.NewClientWithResponses(getTestUrl()) // Adjust the URL to your API
+	client, err := generated.NewClientWithResponses(getTestUrl())
 	require.NoError(t, err, "Failed to create client")
 
 	adminToken := "admin1"
@@ -149,7 +149,6 @@ func TestGetUserBanner(t *testing.T) {
 		FeatureId: 1,
 	}
 
-	// Testing with admin1 token
 	resp, err := client.GetUserBannerWithResponse(context.Background(), &params, func(ctx context.Context, req *http.Request) error {
 		req.Header.Set("Token", "admin1")
 		return nil
@@ -160,7 +159,6 @@ func TestGetUserBanner(t *testing.T) {
 
 	assert.Equal(t, resp.JSON200, &map[string]interface{}{"message": "New Year Sale"})
 
-	// Testing with user1 token
 	resp, err = client.GetUserBannerWithResponse(context.Background(), &params, func(ctx context.Context, req *http.Request) error {
 		req.Header.Set("Token", "user1")
 		return nil

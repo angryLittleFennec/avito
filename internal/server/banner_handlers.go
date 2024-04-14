@@ -36,7 +36,6 @@ type BannerPostResponseCreated struct {
 	BannerId *uint `json:"banner_id,omitempty"`
 }
 
-// GetBanner handles GET /banner endpoint
 func (s *Server) GetBanner(ctx echo.Context, params generated.GetBannerParams) error {
 	slog.Info("Starting GetBanner request", "params", params)
 
@@ -159,7 +158,6 @@ func isDuplicateEntryError(err error) bool {
 	return strings.Contains(err.Error(), "23505")
 }
 
-// DeleteBannerId handles DELETE /banner/{id} endpoint
 func (s *Server) DeleteBannerId(ctx echo.Context, id int, params generated.DeleteBannerIdParams) error {
 	if err := s.DB.Delete(&db.Banner{}, id).Error; err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, "Failed to delete banner")
@@ -167,7 +165,6 @@ func (s *Server) DeleteBannerId(ctx echo.Context, id int, params generated.Delet
 	return ctx.NoContent(http.StatusNoContent)
 }
 
-// PatchBannerId handles PATCH /banner/{id} endpoint
 func (s *Server) PatchBannerId(ctx echo.Context, id int, params generated.PatchBannerIdParams) error {
 	var jsonBody generated.PatchBannerIdJSONBody
 	if err := ctx.Bind(&jsonBody); err != nil {
