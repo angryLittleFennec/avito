@@ -20,7 +20,6 @@ jobs:
           with:
             version: v1.56.2
             args: --out-format=colored-line-number
-            working-directory: api
   
     test:
       timeout-minutes: 5
